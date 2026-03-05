@@ -3,31 +3,39 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Bajamos a 22.04 para mayor estabilidad con Buildozer
     steps:
-      - name: Checkout del código
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Configurar Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Instalar Dependencias del Sistema (Ubuntu 24.04)
+      - name: Instalar Dependencias del Sistema
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
+          sudo apt install -y git zip unzip autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
 
       - name: Instalar Buildozer y Cython
         run: |
           pip install --user --upgrade buildozer cython==0.29.33
 
-      - name: Compilar APK con Buildozer
+      - name: Compilar con Buildozer
         run: |
-          # Acepta automáticamente las licencias de Android SDK
-          yes | buildozer android debug
+          # Forzamos la limpieza y compilación directa
+          buildozer android debug
+        env:
+          # Estas variables ayudan a Buildozer a encontrar las herramientas
+          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
 
-      - name: Subir Archivo APK
+      - name: Subir APK Resultante
         uses: actions/upload-artifact@v4
         with:
           name: MiAppNotas-Honor
