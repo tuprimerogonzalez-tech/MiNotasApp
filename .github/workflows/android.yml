@@ -5,29 +5,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4  # Actualizado de v2 a v4
+      - name: Checkout del código
+        uses: actions/checkout@v4
 
-      - name: Instalar Python
-        uses: actions/setup-python@v5 # Actualizado de v2 a v5
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Instalar Dependencias del Sistema
+      - name: Instalar Dependencias del Sistema (Ubuntu 24.04)
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          sudo apt install -y git zip unzip autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
 
       - name: Instalar Buildozer y Cython
         run: |
           pip install --user --upgrade buildozer cython==0.29.33
 
-      - name: Compilar con Buildozer
+      - name: Compilar APK con Buildozer
         run: |
-          # El comando 'yes' acepta las licencias de Android automáticamente
+          # Acepta automáticamente las licencias de Android SDK
           yes | buildozer android debug
 
-      - name: Subir APK Resultante
-        uses: actions/upload-artifact@v4 # ¡ESTE ERA EL ERROR! Actualizado a v4
+      - name: Subir Archivo APK
+        uses: actions/upload-artifact@v4
         with:
           name: MiAppNotas-Honor
           path: bin/*.apk
