@@ -9,14 +9,14 @@ requirements = python3,kivy
 orientation = portrait
 fullscreen = 0
 
-# CONFIGURACIÓN CRÍTICA PARA EL ERROR DE LICENCIAS
+# CONFIGURACIÓN CORREGIDA
 android.accept_sdk_license = True
 android.api = 33
 android.minapi = 21
-android.sdk = 33
+# Eliminamos la línea android.sdk que daba WARNING
 android.build_tools_version = 33.0.0
 android.archs = arm64-v8a
-android.allow_backup = True
+android.ndk = 25b
 
 [buildozer]
 log_level = 2
