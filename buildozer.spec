@@ -8,10 +8,15 @@ version = 0.1
 requirements = python3,kivy
 orientation = portrait
 fullscreen = 0
-android.archs = arm64-v8a
-android.api = 31
+
+# CONFIGURACIÓN CRÍTICA PARA EL ERROR DE LICENCIAS
+android.accept_sdk_license = True
+android.api = 33
 android.minapi = 21
-android.permissions = WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
+android.sdk = 33
+android.build_tools_version = 33.0.0
+android.archs = arm64-v8a
+android.allow_backup = True
 
 [buildozer]
 log_level = 2
